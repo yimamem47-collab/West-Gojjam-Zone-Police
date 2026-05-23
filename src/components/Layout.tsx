@@ -21,12 +21,12 @@ import {
   Car,
   MapPin
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react'; // Adjusted based on your framer-motion setup
+import { motion, AnimatePresence } from 'motion/react';
 import { Language, translations } from '../lib/translations';
 import { onFirestoreStatusChange } from '../firebase';
 
-// Removed 'key' from props interface entirely
 interface SidebarItemProps {
+  key?: string;
   icon: React.ElementType;
   label: string;
   active: boolean;
@@ -62,7 +62,7 @@ interface LayoutProps {
 }
 
 export function Layout({ children, activeTab, setActiveTab, onBack, onLogout, userName, userRole, lang, setLang }: LayoutProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Cleaned up React.useState mix
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isFirestoreConnected, setIsFirestoreConnected] = useState(true);
   const t = translations[lang];
 
@@ -85,7 +85,7 @@ export function Layout({ children, activeTab, setActiveTab, onBack, onLogout, us
     ...(userRole === 'Admin' ? [{ id: 'officers', label: t.officers || 'Officers', icon: Users }] : []),
     { id: 'assignments', label: t.assignments || 'Assignments', icon: ClipboardList },
     { id: 'reports', label: t.reports || 'Reports', icon: FileText },
-    { id: 'zone-reports', label: t.zoneReports?.title || 'Zone Reports', icon: ClipboardList },
+    { id: 'zone-reports', label: t.zoneReports.title || 'Zone Reports', icon: ClipboardList },
     { id: 'community-reports', label: lang === 'am' ? 'የማህበረሰብ ሪፖርቶች' : 'Community Reports', icon: Users },
     { id: 'contacts', label: t.contacts || 'Contacts', icon: Phone },
     { id: 'info', label: t.publicServices || 'Public Services', icon: Shield },
@@ -118,7 +118,7 @@ export function Layout({ children, activeTab, setActiveTab, onBack, onLogout, us
             <ArrowLeft size={24} />
           </button>
           <div className="ml-auto w-10 h-10 bg-white rounded-full flex items-center justify-center p-0.5 border border-brand-accent/30 overflow-hidden shadow-inner">
-            <img src="/police_logo.png" alt="Logo" className="w-full h-full object-contain" />
+            <img src="/police-logo.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@ export function Layout({ children, activeTab, setActiveTab, onBack, onLogout, us
           <div className="flex items-center justify-between mb-8 pb-6 border-b border-brand-border">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-0.5 border border-brand-accent shadow-lg overflow-hidden">
-                <img src="/police_logo.png" alt="Logo" className="w-full h-full object-contain" />
+                <img src="/police-logo.png" alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-black tracking-tighter text-white leading-none">WGZ POLICE</span>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Users, Plus, Search, Trash2, Edit2, Mail, Shield, BadgeCheck, MapPin, Phone } from 'lucide-react';
 import { Officer } from '../types';
-import { motion } from 'framer-motion'; 
+import { motion } from 'motion/react';
 import { Language, translations } from '../lib/translations';
 import { dialPhone } from '../lib/utils';
 
@@ -13,23 +13,21 @@ interface OfficersProps {
   onDelete: (id: string) => void;
 }
 
-const INITIAL_OFFICER_STATE: Omit<Officer, 'id'> = {
-  name: '',
-  rank: 'Officer',
-  badgeNumber: '',
-  station: '',
-  phone: '',
-  email: '',
-  status: 'Active',
-  photo: ''
-};
-
 export function Officers({ officers, lang, onAdd, onUpdate, onDelete }: OfficersProps) {
   const t = translations[lang];
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOfficer, setEditingOfficer] = useState<Officer | null>(null);
-  const [newOfficer, setNewOfficer] = useState<Omit<Officer, 'id'>>(INITIAL_OFFICER_STATE);
+  const [newOfficer, setNewOfficer] = useState<Omit<Officer, 'id'>>({
+    name: '',
+    rank: 'Officer',
+    badgeNumber: '',
+    station: '',
+    phone: '',
+    email: '',
+    status: 'Active',
+    photo: ''
+  });
 
   const filteredOfficers = officers.filter(o => 
     (o.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -38,15 +36,10 @@ export function Officers({ officers, lang, onAdd, onUpdate, onDelete }: Officers
     (o.status || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const resetFormState = () => {
-    setIsModalOpen(false);
-    setEditingOfficer(null);
-    setNewOfficer(INITIAL_OFFICER_STATE);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validation
     if (!newOfficer.name.trim() || newOfficer.name.length < 3) {
       alert(lang === 'am' ? 'እባክዎ ትክክለኛ ስም ያስገቡ (ቢያንስ 3 ፊደላት)' : 'Please enter a valid name (min 3 characters)');
       return;
@@ -70,10 +63,12 @@ export function Officers({ officers, lang, onAdd, onUpdate, onDelete }: Officers
 
     if (editingOfficer) {
       onUpdate(editingOfficer.id, newOfficer);
+      setEditingOfficer(null);
     } else {
       onAdd(newOfficer);
     }
-    resetFormState();
+    setIsModalOpen(false);
+    setNewOfficer({ name: '', rank: 'Officer', badgeNumber: '', station: '', phone: '', email: '', status: 'Active', photo: '' });
   };
 
   const handleEdit = (officer: Officer) => {
@@ -89,6 +84,12 @@ export function Officers({ officers, lang, onAdd, onUpdate, onDelete }: Officers
       photo: officer.photo || ''
     });
     setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingOfficer(null);
+    setNewOfficer({ name: '', rank: 'Officer', badgeNumber: '', station: '', phone: '', email: '', status: 'Active', photo: '' });
   };
 
   return (
@@ -260,7 +261,7 @@ export function Officers({ officers, lang, onAdd, onUpdate, onDelete }: Officers
                   onChange={(e) => setNewOfficer({...newOfficer, station: e.target.value})}
                 >
                   <option value="">{t.selectStation}</option>
-                  {Object.entries(t.stations || {}).map(([key, label]) => (
+                  {Object.entries(t.stations).map(([key, label]) => (
                     <option key={key} value={label as string}>{label as string}</option>
                   ))}
                 </select>
@@ -298,7 +299,7 @@ export function Officers({ officers, lang, onAdd, onUpdate, onDelete }: Officers
                 </select>
               </div>
               <div className="flex gap-3 pt-4">
-                <button type="button" onClick={resetFormState} className="btn-secondary flex-1">
+                <button type="button" onClick={handleCloseModal} className="btn-secondary flex-1">
                   {t.cancel}
                 </button>
                 <button type="submit" className="btn-primary flex-1">

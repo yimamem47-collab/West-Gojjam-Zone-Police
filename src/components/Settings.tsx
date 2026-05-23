@@ -7,7 +7,6 @@ import { onFirestoreStatusChange, clearFirestoreCache } from '../firebase';
 import { testFirebaseConnection, testTelegramConnection, testGoogleSheetsConnection, DiagnosticResult } from '../services/diagnostics';
 import { APP_VERSION } from '../constants';
 import { pushFileToGitHub, SyncResult } from '../services/githubFileService';
-import { SyncResult } from '../services/githubFileService';
 interface SettingsProps {
   user: UserType | null;
   lang: Language;

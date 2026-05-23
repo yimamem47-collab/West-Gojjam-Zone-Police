@@ -38,15 +38,15 @@ export const INITIAL_REPORTS: Report[] = [
 ];
 
 export const EMERGENCY_CONTACTS = [
-  { id: '1', nameKey: 'westGojjamZone', phone: '0587750972' },
-  { id: '2', nameKey: 'trafficPoliceChief', phone: '0587751002' },
-  { id: '3', nameKey: 'mediaCommunication', phone: '0587750327' },
-  { id: '4', nameKey: 'finoteSelamCity', phone: '0587751097' },
-  { id: '5', nameKey: 'bureCity', phone: '0587741004' },
-  { id: '6', nameKey: 'bureZuria', phone: '0587740024' },
-  { id: '7', nameKey: 'dembachaCity', phone: '0587730256' },
-  { id: '8', nameKey: 'dembachaZuria', phone: '0582311656' },
+  { id: '1', nameKey: 'westGojjamZone', phone: '0587750972', email: 'wg.police@wgpolice.gov.et', category: 'HQ' },
+  { id: '2', nameKey: 'trafficPoliceChief', phone: '0587751002', email: 'traffic.chief@wgpolice.gov.et', category: 'Traffic' },
+  { id: '3', nameKey: 'mediaCommunication', phone: '0587750327', email: 'media@wgpolice.gov.et', category: 'Comm' },
+  { id: '4', nameKey: 'finoteSelamCity', phone: '0587751097', email: 'fs.station@wgpolice.gov.et', category: 'Station' },
+  { id: '5', nameKey: 'bureCity', phone: '0587741004', email: 'bure.city@wgpolice.gov.et', category: 'Station' },
+  { id: '6', nameKey: 'bureZuria', phone: '0587740024', email: 'bure.zuria@wgpolice.gov.et', category: 'Station' },
+  { id: '7', nameKey: 'dembachaCity', phone: '0587730256', email: 'dembacha.city@wgpolice.gov.et', category: 'Station' },
+  { id: '8', nameKey: 'dembachaZuria', phone: '0582311656', email: 'dembacha.zuria@wgpolice.gov.et', category: 'Station' },
 ];
 
-// ተስተካክሏል: ምስሉ በትክክል እንዲታይ ወደ '/logo.png' ተቀይሯል
-export const APP_LOGO = "/logo.png";
+export const APP_LOGO = "/police-logo.png";
+export const APP_VERSION = "1.0.3-prod";
