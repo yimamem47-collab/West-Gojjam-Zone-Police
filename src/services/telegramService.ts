@@ -1,50 +1,50 @@
-const BOT_TOKEN = '8405421128:AAEX7lRd1Q0unboIvb1FIthAIH0QCR7iJXA';
-const CHAT_ID = '-1003878859973';
-
-export async function sendTelegramMessage(message: string) {
-  console.log('Attempting to send Telegram message to:', CHAT_ID);
+/**
+ * Sends a message via the server-side proxy to bypass browser restrictions
+ * and keep the bot token secure.
+ */
+export async function sendTelegramMessage(message: string, retries = 2) {
+  const url = '/api/telegram';
   
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-  
-  try {
-    console.log('Sending POST request to Telegram...');
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      })
-    });
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          html: true
+        })
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Telegram API error (POST):', errorData);
+      if (response.ok) {
+        console.log('Telegram message sent via proxy successfully');
+        return true;
+      }
       
-      // Fallback: try sending without HTML parsing if it failed due to bad entities
-      if (errorData.description && errorData.description.includes('parse entities')) {
-        console.log('Retrying without HTML parse mode...');
-        const fallbackResponse = await fetch(url, {
+      const errorData = await response.json();
+      console.error(`Telegram Proxy error (Attempt ${i + 1}):`, errorData);
+      
+      // If server returns a parse error, try plain text
+      if (errorData.description && errorData.description.includes('can\'t parse entities')) {
+        const retryResponse = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: message.replace(/<[^>]*>?/gm, '') // Strip HTML tags for fallback
+            message: message.replace(/<[^>]*>?/gm, ''),
+            html: false
           })
         });
-        if (fallbackResponse.ok) return true;
+        if (retryResponse.ok) return true;
       }
-      
-      return false;
+    } catch (error: any) {
+      console.error(`Telegram Proxy fetch error (Attempt ${i + 1}):`, error.message || error);
+      if (i < retries) {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
     }
-    
-    console.log('Telegram message sent successfully');
-    return true;
-  } catch (error) {
-    console.error('Failed to send Telegram message:', error);
-    return false;
   }
+  
+  return false;
 }
 
 export function escapeHtml(text: string | undefined | null): string {

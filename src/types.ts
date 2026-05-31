@@ -2,6 +2,24 @@ export type IncidentStatus = 'Open' | 'In Progress' | 'Closed';
 export type AssignmentStatus = 'Pending' | 'Completed';
 export type ReportStatus = 'Submitted' | 'Pending Review';
 
+export interface TrafficDetails {
+  accidentType?: string;
+  accidentImpact?: string;
+  numDeaths?: number;
+  numHeavyInjuries?: number;
+  numLightInjuries?: number;
+  propertyDamageEstimate?: string;
+  driverExperience?: string;
+  vehicleType?: string;
+  plateNumber?: string;
+  licenseGrade?: string;
+  accidentCause?: string;
+  reporterName?: string;
+  reporterAddress?: string;
+  reporterPhone?: string;
+  reporterOther?: string;
+}
+
 export interface Incident {
   id: string;
   title: string;
@@ -18,6 +36,11 @@ export interface Incident {
   category: string;
   description?: string;
   photos?: string[];
+  document_url?: string;
+  documents?: { name: string; url: string }[];
+  voice_url?: string;
+  timestamp?: string;
+  trafficDetails?: TrafficDetails;
 }
 
 export interface Officer {
@@ -29,6 +52,8 @@ export interface Officer {
   station: string;
   phone: string;
   status: 'Active' | 'On Leave' | 'Suspended' | 'Lost';
+  photo?: string;
+  role?: 'Officer' | 'Admin';
 }
 
 export interface Assignment {
@@ -55,6 +80,11 @@ export interface Report {
   category: string;
   description?: string;
   photos?: string[];
+  document_url?: string;
+  documents?: { name: string; url: string }[];
+  voice_url?: string;
+  timestamp?: string;
+  trafficDetails?: TrafficDetails;
 }
 
 export interface ZoneReport {
@@ -67,6 +97,7 @@ export interface ZoneReport {
   report_type: 'Monthly' | 'Quarterly' | '6-Month' | '9-Month' | 'Annual';
   photo_url?: string;
   document_url?: string;
+  voice_url?: string;
   timestamp: string;
 }
 
@@ -88,4 +119,51 @@ export interface User {
   email: string;
   role: 'Admin' | 'Officer';
   avatar?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  text: string;
+  sender: 'user' | 'ai';
+  timestamp: string;
+  userId: string;
+}
+
+export interface MissingPerson {
+  id: string;
+  name: string;
+  age: number | string;
+  gender: string;
+  lastSeenDate: string;
+  lastSeenLocation: string;
+  photo?: string;
+  description: string;
+  contactPhone: string;
+  status: 'Missing' | 'Found';
+  reportedBy: string;
+  timestamp?: string;
+}
+
+export interface WantedPerson {
+  id: string;
+  name: string;
+  alias?: string;
+  crimeCommitted: string;
+  photo?: string;
+  description: string;
+  lastKnownLocation?: string;
+  status: 'Wanted' | 'Captured';
+  reward?: string;
+  timestamp?: string;
+}
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+  author: string;
+  category: string;
+  photo?: string;
+  timestamp?: string;
 }
